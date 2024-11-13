@@ -14,6 +14,7 @@ export default defineConfig({
       registerType: "autoUpdate",
       devOptions: { enabled: true },
       manifest: {
+        name: "Joex",
         short_name: "Joex",
         theme_color: "#fff",
         background_color: "#222",
