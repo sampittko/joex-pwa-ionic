@@ -3,20 +3,31 @@
 import legacy from '@vitejs/plugin-legacy'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
-import { VitePWA } from 'vite-plugin-pwa';
-import mkcert from'vite-plugin-mkcert'
+import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     legacy(),
-    mkcert(),
-    VitePWA({ registerType: 'autoUpdate' })
+    VitePWA({
+      registerType: "autoUpdate",
+      devOptions: { enabled: true },
+      manifest: {
+        name: "Journal extension",
+        short_name: "Joex",
+        start_url: "/",
+        display: "standalone",
+        background_color: "#ffffff",
+        theme_color: "#ffffff",
+        lang: "en",
+        scope: "/",
+      },
+    }),
   ],
   test: {
     globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/setupTests.ts',
+    environment: "jsdom",
+    setupFiles: "./src/setupTests.ts",
   },
-})
+});
