@@ -33,25 +33,11 @@ import '@ionic/react/css/palettes/dark.system.css';
 /* Theme variables */
 import './theme/variables.css';
 import { useLayoutEffect } from "react";
-
-const getPlatformMode = (): "ios" | "md" => {
-  const userAgent = navigator.userAgent;
-
-  if (/iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream) {
-    return "ios";
-  }
-
-  if (/android/i.test(userAgent)) {
-    return "md";
-  }
-
-  return "md";
-};
+import { getPlatformMode } from "./utils";
 
 const App: React.FC = () => {
   useLayoutEffect(() => {
     setupIonicReact({
-      rippleEffect: false,
       mode: getPlatformMode(),
     });
   }, []);
