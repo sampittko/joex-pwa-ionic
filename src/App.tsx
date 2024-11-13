@@ -32,22 +32,44 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import { useLayoutEffect } from "react";
 
-setupIonicReact();
+const getPlatformMode = (): "ios" | "md" => {
+  const userAgent = navigator.userAgent;
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+  if (/iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream) {
+    return "ios";
+  }
+
+  if (/android/i.test(userAgent)) {
+    return "md";
+  }
+
+  return "md";
+};
+
+const App: React.FC = () => {
+  useLayoutEffect(() => {
+    setupIonicReact({
+      rippleEffect: false,
+      mode: getPlatformMode(),
+    });
+  }, []);
+
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route exact path="/home">
+            <Home />
+          </Route>
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  );
+};
 
 export default App;
