@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: "app.sampittko.joex",
-  appName: "joex",
+  appName: "Joex",
   webDir: "dist",
   plugins: {
     Badge: {
