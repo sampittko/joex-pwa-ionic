@@ -1,7 +1,10 @@
 export default function getPlatformMode(): "ios" | "md" {
   const userAgent = navigator.userAgent;
 
-  if (/iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream) {
+  if (
+    /(Mac OS|iPad|iPhone|iPod)/.test(userAgent) &&
+    !(window as any).MSStream
+  ) {
     return "ios";
   }
 
