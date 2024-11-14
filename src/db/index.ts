@@ -1,4 +1,4 @@
-import { NewLog } from "@/pages/Logs";
+import { NewLog } from "@/types/log";
 import Dexie, { Table } from "dexie";
 
 class AppDatabase extends Dexie {

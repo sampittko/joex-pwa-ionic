@@ -1,18 +1,18 @@
 import { Badge } from "@capawesome/capacitor-badge";
 
-export default class BadgeManager {
-  private static instance: BadgeManager;
+export default class BadgeService {
+  private static instance: BadgeService;
   private isSupported = false;
 
   private constructor() {}
 
-  public static async getInstance(): Promise<BadgeManager> {
-    if (!BadgeManager.instance) {
-      BadgeManager.instance = new BadgeManager();
+  public static async getInstance(): Promise<BadgeService> {
+    if (!BadgeService.instance) {
+      BadgeService.instance = new BadgeService();
       const result = await Badge.isSupported();
-      BadgeManager.instance.isSupported = result.isSupported;
+      BadgeService.instance.isSupported = result.isSupported;
     }
-    return BadgeManager.instance;
+    return BadgeService.instance;
   }
 
   public async getBadgeCount(): Promise<number> {

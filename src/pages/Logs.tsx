@@ -1,7 +1,8 @@
 import "./Logs.css";
 
 import { AddLogButton, AddLogModal, LogList } from "@/components";
-import db from "@/db";
+import { LogsService } from "@/services/logs";
+import type { Log } from "@/types/log";
 import {
   IonContent,
   IonHeader,
@@ -11,40 +12,16 @@ import {
 } from "@ionic/react";
 import { useLiveQuery } from "dexie-react-hooks";
 
-export interface NewLog {
-  content: string;
-  createdDate: Date;
-  updatedDate: Date;
-  migratedDate: Date | null;
-  recoveredDate: Date | null;
-  isMigrated: boolean;
-}
-
-export interface Log extends NewLog {
-  id: string;
-}
-
 export default function Logs() {
-  const logs =
-    (useLiveQuery(() =>
-      db.logs.orderBy("createdDate").reverse().toArray()
-    ) as Log[]) ?? [];
+  const logs: Log[] =
+    useLiveQuery(() => LogsService.getInstance().getAllLogs()) ?? [];
 
   async function handleSave(content: string) {
-    const now = new Date();
-    const newLog: NewLog = {
-      content,
-      createdDate: now,
-      updatedDate: now,
-      migratedDate: null,
-      recoveredDate: null,
-      isMigrated: false,
-    };
-    await db.logs.add(newLog);
+    await LogsService.getInstance().createLog(content);
   }
 
   async function handleDelete(id: string) {
-    await db.logs.delete(id);
+    await LogsService.getInstance().deleteLog(id);
   }
 
   return (
