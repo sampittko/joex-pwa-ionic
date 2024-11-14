@@ -69,6 +69,7 @@ export default function AddLogModal({ onSave }: AddLogModalProps) {
             value={inputValue}
             onIonInput={(e) => setInputValue(e.detail.value ?? "")}
             autoGrow
+            autoFocus
           />
         </IonItem>
       </IonContent>
