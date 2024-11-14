@@ -17,18 +17,26 @@ interface LogListProps {
 export default function LogList({ logs, onDelete }: LogListProps) {
   return (
     <IonList inset>
-      {logs.map((log) => (
-        <IonItemSliding key={log.id}>
-          <IonItem>
-            <IonLabel>{log.content}</IonLabel>
-          </IonItem>
-          <IonItemOptions side="end">
-            <IonItemOption color="danger" onClick={() => onDelete(log.id)}>
-              <IonIcon slot="icon-only" icon={trash}></IonIcon>
-            </IonItemOption>
-          </IonItemOptions>
-        </IonItemSliding>
-      ))}
+      {logs.length === 0 ? (
+        <IonItem>
+          <IonLabel className="ion-text-center ion-padding" color="medium">
+            No logs yet
+          </IonLabel>
+        </IonItem>
+      ) : (
+        logs.map((log) => (
+          <IonItemSliding key={log.id}>
+            <IonItem>
+              <IonLabel>{log.content}</IonLabel>
+            </IonItem>
+            <IonItemOptions side="end">
+              <IonItemOption color="danger" onClick={() => onDelete(log.id)}>
+                <IonIcon slot="icon-only" icon={trash}></IonIcon>
+              </IonItemOption>
+            </IonItemOptions>
+          </IonItemSliding>
+        ))
+      )}
     </IonList>
   );
 }
