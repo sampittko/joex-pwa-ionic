@@ -9,49 +9,53 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 import { useRef, useState } from "react";
 
 interface AddLogModalProps {
   onSave: (content: string) => void;
 }
 
+type ModalAction = "save" | "discard";
+
 export default function AddLogModal({ onSave }: AddLogModalProps) {
   const modal = useRef<HTMLIonModalElement>(null);
   const textareaRef = useRef<HTMLIonTextareaElement>(null);
   const [inputValue, setInputValue] = useState("");
 
-  function handleSave() {
-    if (!inputValue.trim()) return;
-    onSave(inputValue);
-    setInputValue("");
-    modal.current?.dismiss(inputValue, "confirm");
-  }
+  const handleModalAction = (action: ModalAction, data?: string) => {
+    modal.current?.dismiss(data, action);
+  };
 
-  function handleCancel() {
-    modal.current?.dismiss(null, "cancel");
+  const handleDismiss = (event: CustomEvent<OverlayEventDetail>) => {
+    const { data, role } = event.detail;
+    if (role === "save" && data) onSave(data);
     setInputValue("");
-  }
+  };
 
-  function handleModalOpen() {
+  const handleModalOpen = () => {
     textareaRef.current?.setFocus();
-  }
+  };
 
   return (
     <IonModal
       ref={modal}
       trigger="add-log-button"
       onIonModalDidPresent={handleModalOpen}
+      onDidDismiss={handleDismiss}
     >
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton onClick={handleCancel}>Discard</IonButton>
+            <IonButton onClick={() => handleModalAction("discard")}>
+              Discard
+            </IonButton>
           </IonButtons>
           <IonTitle>New Log</IonTitle>
           <IonButtons slot="end">
             <IonButton
               strong
-              onClick={handleSave}
+              onClick={() => handleModalAction("save", inputValue)}
               disabled={!inputValue.trim()}
             >
               Save
