@@ -1,8 +1,7 @@
 import "./Logs.css";
 
 import { AddLogButton, AddLogModal, LogList } from "@/components";
-import { LogsService } from "@/services/logs";
-import type { Log } from "@/types/log";
+import { useLogs } from "@/hooks/useLogs";
 import {
   IonContent,
   IonHeader,
@@ -10,19 +9,9 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { useLiveQuery } from "dexie-react-hooks";
 
 export default function Logs() {
-  const logs: Log[] =
-    useLiveQuery(() => LogsService.getInstance().getAllLogs()) ?? [];
-
-  async function handleSave(content: string) {
-    await LogsService.getInstance().createLog(content);
-  }
-
-  async function handleDelete(id: string) {
-    await LogsService.getInstance().deleteLog(id);
-  }
+  const { logs, saveLog, deleteLog } = useLogs();
 
   return (
     <IonPage>
@@ -37,9 +26,9 @@ export default function Logs() {
             <IonTitle size="large">Logs</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <LogList logs={logs} onDelete={handleDelete} />
+        <LogList logs={logs} onDelete={deleteLog} />
         <AddLogButton />
-        <AddLogModal onSave={handleSave} />
+        <AddLogModal onSave={saveLog} />
       </IonContent>
     </IonPage>
   );
