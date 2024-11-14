@@ -14,13 +14,15 @@ import { useRef, useState } from "react";
 
 interface AddLogModalProps {
   onSave: (content: string) => void;
+  textareaRef: React.RefObject<HTMLIonTextareaElement>;
 }
 
 type ModalAction = "save" | "discard";
 
-export default function AddLogModal({ onSave }: AddLogModalProps) {
+export default function AddLogModal(props: AddLogModalProps) {
+  const { onSave, textareaRef } = props;
+
   const modal = useRef<HTMLIonModalElement>(null);
-  const textareaRef = useRef<HTMLIonTextareaElement>(null);
   const [inputValue, setInputValue] = useState("");
 
   const handleModalAction = (action: ModalAction, data?: string) => {
@@ -41,7 +43,7 @@ export default function AddLogModal({ onSave }: AddLogModalProps) {
     <IonModal
       ref={modal}
       trigger="add-log-button"
-      onIonModalDidPresent={handleModalOpen}
+      onDidPresent={handleModalOpen}
       onDidDismiss={handleDismiss}
     >
       <IonHeader>

@@ -7,9 +7,11 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import { useRef } from "react";
 
 export default function Logs() {
   const { logs, saveLog, deleteLog } = useLogs();
+  const textareaRef = useRef<HTMLIonTextareaElement>(null);
 
   useBadgeSync(logs.length);
 
@@ -27,8 +29,8 @@ export default function Logs() {
           </IonToolbar>
         </IonHeader>
         <LogList logs={logs} onDelete={deleteLog} />
-        <AddLogButton />
-        <AddLogModal onSave={saveLog} />
+        <AddLogButton textareaRef={textareaRef} />
+        <AddLogModal onSave={saveLog} textareaRef={textareaRef} />
       </IonContent>
     </IonPage>
   );
