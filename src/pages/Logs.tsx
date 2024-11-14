@@ -1,5 +1,3 @@
-import "./Logs.css";
-
 import { AddLogButton, AddLogModal, LogList } from "@/components";
 import { useBadgeSync, useLogs } from "@/hooks";
 import {
