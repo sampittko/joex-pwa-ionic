@@ -1,4 +1,5 @@
 import { Badge } from "@capawesome/capacitor-badge";
+import type { PermissionStatus } from "@capawesome/capacitor-badge";
 
 export default class BadgeService {
   private static instance: BadgeService;
@@ -15,29 +16,24 @@ export default class BadgeService {
     return BadgeService.instance;
   }
 
-  public async getBadgeCount(): Promise<number> {
-    if (!this.isSupported) return 0;
-    const result = await Badge.get();
-    return result.count;
-  }
-
   public async setBadgeCount(count: number): Promise<void> {
     if (!this.isSupported) return;
+
+    const permissions = await this.checkPermissions();
+    if (permissions.display !== "granted") {
+      await this.requestPermissions();
+    }
+
     await Badge.set({ count });
   }
 
-  public async clearBadgeCount(): Promise<void> {
-    if (!this.isSupported) return;
-    await Badge.clear();
+  private async checkPermissions(): Promise<PermissionStatus> {
+    if (!this.isSupported) return { display: "denied" };
+    return await Badge.checkPermissions();
   }
 
-  public async increaseBadgeCount(): Promise<void> {
-    if (!this.isSupported) return;
-    await Badge.increase();
-  }
-
-  public async decreaseBadgeCount(): Promise<void> {
-    if (!this.isSupported) return;
-    await Badge.decrease();
+  private async requestPermissions(): Promise<PermissionStatus> {
+    if (!this.isSupported) return { display: "denied" };
+    return await Badge.requestPermissions();
   }
 }
