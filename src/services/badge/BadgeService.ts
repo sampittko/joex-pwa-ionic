@@ -17,6 +17,12 @@ export default class BadgeService {
   }
 
   public async setBadgeCount(count: number): Promise<void> {
+    await this.withPermissions(async () => {
+      await Badge.set({ count });
+    });
+  }
+
+  private async withPermissions(operation: () => Promise<void>): Promise<void> {
     if (!this.isSupported) return;
 
     const permissions = await this.checkPermissions();
@@ -24,7 +30,7 @@ export default class BadgeService {
       await this.requestPermissions();
     }
 
-    await Badge.set({ count });
+    await operation();
   }
 
   private async checkPermissions(): Promise<PermissionStatus> {
