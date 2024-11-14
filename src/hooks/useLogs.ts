@@ -8,7 +8,7 @@ export default function useLogs() {
     await LogsService.getInstance().createLog(content);
   }
 
-  async function handleDelete(id: string) {
+  async function handleDelete(id: number) {
     await LogsService.getInstance().deleteLog(id);
   }
 

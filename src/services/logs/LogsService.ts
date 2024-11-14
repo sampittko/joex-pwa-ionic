@@ -36,7 +36,7 @@ export default class LogsService {
     await db.logs.add(newLog);
   }
 
-  public async deleteLog(id: string): Promise<void> {
+  public async deleteLog(id: number): Promise<void> {
     await db.logs.delete(id);
   }
 }

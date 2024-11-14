@@ -11,7 +11,7 @@ import { trash } from "ionicons/icons";
 
 interface LogListProps {
   logs: Log[];
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void;
 }
 
 export default function LogList({ logs, onDelete }: LogListProps) {
