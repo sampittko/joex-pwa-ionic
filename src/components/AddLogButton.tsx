@@ -9,9 +9,7 @@ export default function AddLogButton(props: AddLogButtonProps) {
   const { textareaRef } = props;
 
   function handleClick() {
-    setTimeout(() => {
-      textareaRef.current?.setFocus();
-    }, 400);
+    textareaRef.current?.setFocus();
   }
 
   return (
