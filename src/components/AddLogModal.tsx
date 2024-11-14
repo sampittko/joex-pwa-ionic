@@ -66,6 +66,7 @@ export default function AddLogModal({ onSave }: AddLogModalProps) {
             placeholder="Type your log entry here..."
             value={inputValue}
             onIonInput={(e) => setInputValue(e.detail.value ?? "")}
+            rows={28}
             autoGrow
           />
         </IonItem>

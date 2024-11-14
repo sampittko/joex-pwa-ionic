@@ -1,6 +1,7 @@
 import "./Logs.css";
 
 import { AddLogButton, AddLogModal, LogList } from "@/components";
+import db from "@/db";
 import {
   IonContent,
   IonHeader,
@@ -8,10 +9,9 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { useState } from "react";
+import { useLiveQuery } from "dexie-react-hooks";
 
-export interface Log {
-  id: string;
+export interface NewLog {
   content: string;
   createdDate: Date;
   updatedDate: Date;
@@ -20,13 +20,19 @@ export interface Log {
   isMigrated: boolean;
 }
 
-export default function Logs() {
-  const [logs, setLogs] = useState<Log[]>([]);
+export interface Log extends NewLog {
+  id: string;
+}
 
-  function handleSaveLog(content: string) {
+export default function Logs() {
+  const logs =
+    (useLiveQuery(() =>
+      db.logs.orderBy("createdDate").reverse().toArray()
+    ) as Log[]) ?? [];
+
+  async function handleSave(content: string) {
     const now = new Date();
-    const newLog = {
-      id: crypto.randomUUID(),
+    const newLog: NewLog = {
       content,
       createdDate: now,
       updatedDate: now,
@@ -34,11 +40,11 @@ export default function Logs() {
       recoveredDate: null,
       isMigrated: false,
     };
-    setLogs((prev) => [newLog, ...prev]);
+    await db.logs.add(newLog);
   }
 
-  function handleDeleteLog(id: string) {
-    setLogs((prev) => prev.filter((log) => log.id !== id));
+  async function handleDelete(id: string) {
+    await db.logs.delete(id);
   }
 
   return (
@@ -54,9 +60,9 @@ export default function Logs() {
             <IonTitle size="large">Logs</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <LogList logs={logs} onDelete={handleDeleteLog} />
+        <LogList logs={logs} onDelete={handleDelete} />
         <AddLogButton />
-        <AddLogModal onSave={handleSaveLog} />
+        <AddLogModal onSave={handleSave} />
       </IonContent>
     </IonPage>
   );
