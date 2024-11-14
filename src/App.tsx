@@ -1,8 +1,7 @@
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { useEffect, useLayoutEffect } from "react";
-import { BadgeManager } from "./services/badge";
+import { useLayoutEffect } from "react";
 import { getPlatformMode } from "./utils";
 import Logs from "./pages/Logs";
 
@@ -41,32 +40,6 @@ const App: React.FC = () => {
     setupIonicReact({
       mode: getPlatformMode(),
     });
-  }, []);
-
-  const initializeBadge = async () => {
-    try {
-      if (!(await BadgeManager.isSupported())) {
-        return;
-      }
-
-      const hasPermission = (permissions: any) =>
-        permissions.display === "granted";
-      let permissions = await BadgeManager.checkPermissions();
-
-      if (!hasPermission(permissions)) {
-        permissions = await BadgeManager.requestPermissions();
-      }
-
-      if (hasPermission(permissions)) {
-        await BadgeManager.set(1);
-      }
-    } catch (error) {
-      console.error("Failed to initialize badge:", error);
-    }
-  };
-
-  useEffect(() => {
-    initializeBadge();
   }, []);
 
   return (

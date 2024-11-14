@@ -11,8 +11,29 @@ import {
 import ExploreContainer from "../components/ExploreContainer";
 import { add } from "ionicons/icons";
 import "./Logs.css";
+import BadgeManager from "../services/badge/BadgeManager";
+import { useEffect } from "react";
 
 const Logs: React.FC = () => {
+  useEffect(() => {
+    const initializeBadge = async () => {
+      try {
+        const badgeManager = await BadgeManager.getInstance();
+        await badgeManager.increaseBadgeCount();
+      } catch (error) {
+        console.error("Failed to initialize badge:", error);
+      }
+    };
+
+    initializeBadge();
+
+    return () => {
+      BadgeManager.getInstance()
+        .then((badgeManager) => badgeManager.clearBadgeCount())
+        .catch((error) => console.error("Failed to clear badge:", error));
+    };
+  }, []);
+
   return (
     <IonPage>
       <IonHeader collapse="fade" translucent>

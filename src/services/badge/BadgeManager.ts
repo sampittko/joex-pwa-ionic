@@ -1,37 +1,43 @@
-import { Badge, type PermissionStatus } from "@capawesome/capacitor-badge";
+import { Badge } from "@capawesome/capacitor-badge";
 
 export default class BadgeManager {
-  static async isSupported(): Promise<boolean> {
-    const { isSupported } = await Badge.isSupported();
-    return isSupported;
+  private static instance: BadgeManager;
+  private isSupported = false;
+
+  private constructor() {}
+
+  public static async getInstance(): Promise<BadgeManager> {
+    if (!BadgeManager.instance) {
+      BadgeManager.instance = new BadgeManager();
+      const result = await Badge.isSupported();
+      BadgeManager.instance.isSupported = result.isSupported;
+    }
+    return BadgeManager.instance;
   }
 
-  static async checkPermissions(): Promise<PermissionStatus> {
-    return await Badge.checkPermissions();
+  public async getBadgeCount(): Promise<number> {
+    if (!this.isSupported) return 0;
+    const result = await Badge.get();
+    return result.count;
   }
 
-  static async requestPermissions(): Promise<PermissionStatus> {
-    return await Badge.requestPermissions();
-  }
-
-  static async set(count: number): Promise<void> {
+  public async setBadgeCount(count: number): Promise<void> {
+    if (!this.isSupported) return;
     await Badge.set({ count });
   }
 
-  static async initialize(): Promise<void> {
-    const isBadgeSupported = await this.isSupported();
-    if (!isBadgeSupported) {
-      return;
-    }
+  public async clearBadgeCount(): Promise<void> {
+    if (!this.isSupported) return;
+    await Badge.clear();
+  }
 
-    const permissions = await this.checkPermissions();
-    if (permissions.display === "granted") {
-      await this.set(1);
-    } else {
-      const newPermissions = await this.requestPermissions();
-      if (newPermissions.display === "granted") {
-        await this.set(1);
-      }
-    }
+  public async increaseBadgeCount(): Promise<void> {
+    if (!this.isSupported) return;
+    await Badge.increase();
+  }
+
+  public async decreaseBadgeCount(): Promise<void> {
+    if (!this.isSupported) return;
+    await Badge.decrease();
   }
 }
