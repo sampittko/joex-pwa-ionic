@@ -18,15 +18,15 @@ export default function LogList({ logs, onDelete }: LogListProps) {
   return (
     <IonList inset>
       {logs.length === 0 ? (
-        <IonItem>
-          <IonLabel className="ion-text-center ion-padding" color="medium">
-            No logs yet
+        <IonItem color="light">
+          <IonLabel className="ion-text-center" color="medium">
+            List is empty 🥳
           </IonLabel>
         </IonItem>
       ) : (
         logs.map((log) => (
           <IonItemSliding key={log.id}>
-            <IonItem>
+            <IonItem color="light">
               <IonLabel>{log.content}</IonLabel>
             </IonItem>
             <IonItemOptions side="end">
