@@ -33,9 +33,7 @@ export default function AddLogModal({ onSave }: AddLogModalProps) {
   }
 
   function handleModalOpen() {
-    setTimeout(() => {
-      textareaRef.current?.setFocus();
-    }, 400);
+    textareaRef.current?.setFocus();
   }
 
   return (
