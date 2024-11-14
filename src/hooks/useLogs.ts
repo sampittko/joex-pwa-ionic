@@ -1,7 +1,7 @@
-import { LogsService } from "@/services/logs";
+import LogsService from "@/services/logs";
 import { useLiveQuery } from "dexie-react-hooks";
 
-export function useLogs() {
+export default function useLogs() {
   const logs = useLiveQuery(() => LogsService.getInstance().getAllLogs()) ?? [];
 
   async function handleSave(content: string) {

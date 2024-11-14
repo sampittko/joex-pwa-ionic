@@ -1,7 +1,7 @@
 import "./Logs.css";
 
 import { AddLogButton, AddLogModal, LogList } from "@/components";
-import { useLogs } from "@/hooks/useLogs";
+import { useBadgeSync, useLogs } from "@/hooks";
 import {
   IonContent,
   IonHeader,
@@ -12,6 +12,8 @@ import {
 
 export default function Logs() {
   const { logs, saveLog, deleteLog } = useLogs();
+
+  useBadgeSync(logs.length);
 
   return (
     <IonPage>

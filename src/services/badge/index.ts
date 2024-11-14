@@ -1,1 +1,1 @@
-export { default as BadgeService } from "./BadgeService";
+export { default } from "./BadgeService";

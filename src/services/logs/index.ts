@@ -1,1 +1,1 @@
-export { default as LogsService } from "./LogsService";
+export { default } from "./LogsService";
