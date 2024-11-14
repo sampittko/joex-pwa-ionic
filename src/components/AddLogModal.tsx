@@ -11,6 +11,7 @@ import {
 } from "@ionic/react";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
 import { useRef, useState } from "react";
+import { getPlatformMode } from "@/utils";
 
 interface AddLogModalProps {
   onSave: (content: string) => void;
@@ -21,6 +22,7 @@ type ModalAction = "save" | "discard";
 
 export default function AddLogModal(props: AddLogModalProps) {
   const { onSave, textareaRef } = props;
+  const platformMode = getPlatformMode();
 
   const modal = useRef<HTMLIonModalElement>(null);
   const [inputValue, setInputValue] = useState("");
@@ -49,12 +51,19 @@ export default function AddLogModal(props: AddLogModalProps) {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton onClick={() => handleModalAction("discard")}>
-              Discard
-            </IonButton>
+            {platformMode === "ios" && (
+              <IonButton onClick={() => handleModalAction("discard")}>
+                Discard
+              </IonButton>
+            )}
           </IonButtons>
           <IonTitle>New Log</IonTitle>
           <IonButtons slot="end">
+            {platformMode === "md" && (
+              <IonButton onClick={() => handleModalAction("discard")}>
+                Discard
+              </IonButton>
+            )}
             <IonButton
               strong
               onClick={() => handleModalAction("save", inputValue)}
