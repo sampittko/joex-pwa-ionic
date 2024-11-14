@@ -10,7 +10,7 @@ export default function AddLogButton() {
       className="ion-padding-bottom"
     >
       <IonFabButton id="add-log-button">
-        <IonIcon icon={add}></IonIcon>
+        <IonIcon icon={add} style={{ color: "#ffffff" }} />
       </IonFabButton>
     </IonFab>
   );

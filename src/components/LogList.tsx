@@ -31,7 +31,11 @@ export default function LogList({ logs, onDelete }: LogListProps) {
             </IonItem>
             <IonItemOptions side="end">
               <IonItemOption color="danger" onClick={() => onDelete(log.id)}>
-                <IonIcon slot="icon-only" icon={trash}></IonIcon>
+                <IonIcon
+                  slot="icon-only"
+                  icon={trash}
+                  style={{ color: "#ffffff" }}
+                />
               </IonItemOption>
             </IonItemOptions>
           </IonItemSliding>
