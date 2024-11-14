@@ -35,7 +35,7 @@ export default function AddLogModal(props: AddLogModalProps) {
     setInputValue("");
   };
 
-  const handleModalOpen = () => {
+  const handlePresent = () => {
     textareaRef.current?.setFocus();
   };
 
@@ -43,7 +43,7 @@ export default function AddLogModal(props: AddLogModalProps) {
     <IonModal
       ref={modal}
       trigger="add-log-button"
-      onDidPresent={handleModalOpen}
+      onDidPresent={handlePresent}
       onDidDismiss={handleDismiss}
     >
       <IonHeader>
