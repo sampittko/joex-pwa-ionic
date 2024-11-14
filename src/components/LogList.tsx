@@ -1,4 +1,4 @@
-import { Log } from "@/pages/Logs";
+import { Log } from "@/types/log";
 import { IonItem, IonLabel } from "@ionic/react";
 import {
   IonIcon,
