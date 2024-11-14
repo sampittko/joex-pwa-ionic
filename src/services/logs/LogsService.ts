@@ -19,7 +19,7 @@ export default class LogsService {
       .reverse()
       .toArray()
       .then((logs) =>
-        logs.filter((log): log is Log => typeof log.id === "string")
+        logs.filter((log): log is Log => typeof log.id === "number")
       );
   }
 

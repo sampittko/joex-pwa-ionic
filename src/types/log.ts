@@ -8,5 +8,5 @@ export interface NewLog {
 }
 
 export interface Log extends NewLog {
-  id: string;
+  id: number;
 }

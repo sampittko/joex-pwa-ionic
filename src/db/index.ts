@@ -2,7 +2,7 @@ import { NewLog } from "@/types/log";
 import Dexie, { Table } from "dexie";
 
 class AppDatabase extends Dexie {
-  logs!: Table<NewLog & { id?: string }>;
+  logs!: Table<NewLog & { id?: number }>;
 
   constructor() {
     super("joex");
