@@ -39,4 +39,18 @@ export default class LogsService {
   public async deleteLog(id: number): Promise<void> {
     await db.logs.delete(id);
   }
+
+  public async migrateLog(id: number): Promise<void> {
+    await db.logs.update(id, {
+      migratedDate: new Date(),
+      isMigrated: true,
+    });
+  }
+
+  public async recoverLog(id: number): Promise<void> {
+    await db.logs.update(id, {
+      recoveredDate: new Date(),
+      isMigrated: false,
+    });
+  }
 }
