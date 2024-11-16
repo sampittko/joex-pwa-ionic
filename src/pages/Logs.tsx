@@ -16,6 +16,7 @@ import { useRef, useState } from "react";
 
 export default function Logs() {
   const {
+    isLoading,
     capturedLogs,
     migratedLogs,
     saveLog,
@@ -53,6 +54,7 @@ export default function Logs() {
         </IonHeader>
         {mode === "captured" ? (
           <LogList
+            isLoading={isLoading}
             mode={mode}
             logs={capturedLogs}
             onDelete={deleteLog}
@@ -61,6 +63,7 @@ export default function Logs() {
           />
         ) : (
           <LogList
+            isLoading={isLoading}
             mode={mode}
             logs={migratedLogs}
             onDelete={deleteLog}

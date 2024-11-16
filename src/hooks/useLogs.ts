@@ -3,7 +3,9 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { useCallback, useMemo } from "react";
 
 export default function useLogs() {
-  const logs = useLiveQuery(() => LogsService.getInstance().getAllLogs()) ?? [];
+  const result = useLiveQuery(() => LogsService.getInstance().getAllLogs());
+  const isLoading = result === undefined;
+  const logs = result ?? [];
 
   const capturedLogs = useMemo(
     () => logs.filter((log) => !log.isMigrated),
@@ -31,11 +33,12 @@ export default function useLogs() {
     await LogsService.getInstance().recoverLog(id);
   }, []);
 
-  const handleUpdateLog = async (id: number, content: string) => {
+  const handleUpdateLog = useCallback(async (id: number, content: string) => {
     await LogsService.getInstance().updateLog(id, content);
-  };
+  }, []);
 
   return {
+    isLoading,
     capturedLogs,
     migratedLogs,
     saveLog: handleSave,

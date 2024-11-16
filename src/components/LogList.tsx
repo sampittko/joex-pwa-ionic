@@ -1,5 +1,5 @@
 import { Log } from "@/types/log";
-import { IonItem, IonLabel } from "@ionic/react";
+import { IonItem, IonLabel, createAnimation } from "@ionic/react";
 import {
   IonAlert,
   IonIcon,
@@ -9,9 +9,10 @@ import {
 } from "@ionic/react";
 import { IonList } from "@ionic/react";
 import { arrowBack, arrowForward, trash } from "ionicons/icons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface BaseLogListProps {
+  isLoading: boolean;
   logs: Log[];
   onDelete: (id: number) => void;
 }
@@ -33,8 +34,21 @@ interface MigratedLogListProps extends BaseLogListProps {
 type LogListProps = CapturedLogListProps | MigratedLogListProps;
 
 export default function LogList(props: LogListProps) {
-  const { logs, onDelete, onMigrate, onRecover, onEdit, mode } = props;
+  const { logs, onDelete, onMigrate, onRecover, onEdit, mode, isLoading } =
+    props;
   const [logToDelete, setLogToDelete] = useState<number | null>(null);
+  const listRef = useRef<HTMLIonListElement>(null);
+
+  useEffect(() => {
+    if (!isLoading && listRef.current) {
+      const animation = createAnimation()
+        .addElement(listRef.current)
+        .duration(300)
+        .fromTo("opacity", 0, 1);
+
+      animation.play();
+    }
+  }, [isLoading]);
 
   const actionConfig = {
     captured: {
@@ -98,8 +112,8 @@ export default function LogList(props: LogListProps) {
 
   return (
     <>
-      <IonList inset>
-        {logs.length === 0 ? (
+      <IonList ref={listRef} inset style={{ opacity: 0 }}>
+        {isLoading ? null : logs.length === 0 ? (
           <IonItem color="light">
             <IonLabel className="ion-text-center" color="medium">
               {mode === "captured"
