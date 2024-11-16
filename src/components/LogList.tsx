@@ -11,24 +11,24 @@ import { IonList } from "@ionic/react";
 import { arrowBack, arrowForward, trash } from "ionicons/icons";
 import { useState } from "react";
 
-type BaseLogListProps = {
+interface BaseLogListProps {
   logs: Log[];
   onDelete: (id: number) => void;
-};
+}
 
-type CapturedLogListProps = BaseLogListProps & {
+interface CapturedLogListProps extends BaseLogListProps {
   mode: "captured";
   onMigrate: (id: number) => void;
   onRecover?: never;
   onEdit: (id: number, content: string) => void;
-};
+}
 
-type MigratedLogListProps = BaseLogListProps & {
+interface MigratedLogListProps extends BaseLogListProps {
   mode: "migrated";
   onMigrate?: never;
   onRecover: (id: number) => void;
   onEdit?: never;
-};
+}
 
 type LogListProps = CapturedLogListProps | MigratedLogListProps;
 

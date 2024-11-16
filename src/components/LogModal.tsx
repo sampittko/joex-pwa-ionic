@@ -15,10 +15,10 @@ import { useEffect, useRef, useState } from "react";
 
 interface LogModalProps {
   mode: "add" | "edit";
-  initialContent?: string;
-  onSave: (content: string) => void;
-  onClose?: () => void;
   textareaRef: React.RefObject<HTMLIonTextareaElement>;
+  onSave: (content: string) => void;
+  initialContent?: string;
+  onClose?: () => void;
   triggerId?: string;
 }
 
