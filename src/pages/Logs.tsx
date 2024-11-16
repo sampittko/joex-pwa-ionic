@@ -27,36 +27,38 @@ export default function Logs() {
 
   useBadgeSync(capturedLogs.length);
 
-  const renderContent = (mode: "captured" | "migrated") => (
-    <IonContent fullscreen>
-      <IonHeader collapse="condense">
-        <IonToolbar>
-          <IonTitle size="large">Logs</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      {mode === "captured" ? (
-        <LogList
-          mode="captured"
-          logs={capturedLogs}
-          onDelete={deleteLog}
-          onMigrate={migrateLog}
-        />
-      ) : (
-        <LogList
-          mode="migrated"
-          logs={migratedLogs}
-          onDelete={deleteLog}
-          onRecover={recoverLog}
-        />
-      )}
-      {mode === "captured" && (
-        <>
-          <AddLogButton textareaRef={textareaRef} />
-          <AddLogModal onSave={saveLog} textareaRef={textareaRef} />
-        </>
-      )}
-    </IonContent>
-  );
+  function renderContent(mode: "captured" | "migrated") {
+    return (
+      <IonContent fullscreen>
+        <IonHeader collapse="condense">
+          <IonToolbar>
+            <IonTitle size="large">Logs</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        {mode === "captured" ? (
+          <LogList
+            mode={mode}
+            logs={capturedLogs}
+            onDelete={deleteLog}
+            onMigrate={migrateLog}
+          />
+        ) : (
+          <LogList
+            mode={mode}
+            logs={migratedLogs}
+            onDelete={deleteLog}
+            onRecover={recoverLog}
+          />
+        )}
+        {mode === "captured" && (
+          <>
+            <AddLogButton textareaRef={textareaRef} />
+            <AddLogModal onSave={saveLog} textareaRef={textareaRef} />
+          </>
+        )}
+      </IonContent>
+    );
+  }
 
   return (
     <IonPage>
@@ -72,7 +74,6 @@ export default function Logs() {
           </IonSegment>
         </IonToolbar>
       </IonHeader>
-
       <IonSegmentView>
         <IonSegmentContent id="captured">
           {renderContent("captured")}
