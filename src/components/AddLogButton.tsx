@@ -8,7 +8,7 @@ interface AddLogButtonProps {
 export default function AddLogButton(props: AddLogButtonProps) {
   const { textareaRef } = props;
 
-  function handleClick() {
+  function handleClick(): void {
     textareaRef.current?.setFocus();
   }
 

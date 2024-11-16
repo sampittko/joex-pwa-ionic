@@ -20,18 +20,20 @@ type CapturedLogListProps = BaseLogListProps & {
   mode: "captured";
   onMigrate: (id: number) => void;
   onRecover?: never;
+  onEdit: (id: number, content: string) => void;
 };
 
 type MigratedLogListProps = BaseLogListProps & {
   mode: "migrated";
   onMigrate?: never;
   onRecover: (id: number) => void;
+  onEdit?: never;
 };
 
 type LogListProps = CapturedLogListProps | MigratedLogListProps;
 
 export default function LogList(props: LogListProps) {
-  const { logs, onDelete, onMigrate, onRecover, mode } = props;
+  const { logs, onDelete, onMigrate, onRecover, onEdit, mode } = props;
   const [logToDelete, setLogToDelete] = useState<number | null>(null);
 
   const actionConfig = {
@@ -47,24 +49,24 @@ export default function LogList(props: LogListProps) {
     },
   } as const;
 
-  const handleSwipeAction = (logId: number): void => {
+  function handleSwipeAction(logId: number): void {
     actionConfig[mode].action?.(logId);
-  };
+  }
 
-  const handleDelete = (logId: number): void => {
+  function handleDelete(logId: number): void {
     mode === "migrated" ? onDelete(logId) : setLogToDelete(logId);
-  };
+  }
 
-  const handleAlertDismiss = () => {
+  function handleAlertDismiss(): void {
     setLogToDelete(null);
-  };
+  }
 
-  const handleAlertDelete = () => {
+  function handleAlertDelete(): void {
     if (logToDelete) {
       onDelete(logToDelete);
       setLogToDelete(null);
     }
-  };
+  }
 
   const renderSwipeOptions = (log: Log) => (
     <>
@@ -109,7 +111,14 @@ export default function LogList(props: LogListProps) {
           logs.map((log) => (
             <IonItemSliding key={log.id}>
               {renderSwipeOptions(log)}
-              <IonItem color="light">
+              <IonItem
+                color="light"
+                onClick={() =>
+                  mode === "captured" && onEdit?.(log.id, log.content)
+                }
+                button={mode === "captured"}
+                detail={false}
+              >
                 <IonLabel>{log.content}</IonLabel>
               </IonItem>
             </IonItemSliding>

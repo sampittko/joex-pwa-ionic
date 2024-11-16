@@ -15,7 +15,7 @@ export default class LogsService {
 
   public async getAllLogs(): Promise<Log[]> {
     return await db.logs
-      .orderBy("createdDate")
+      .orderBy("updatedDate")
       .reverse()
       .toArray()
       .then((logs) =>
@@ -51,6 +51,13 @@ export default class LogsService {
     await db.logs.update(id, {
       recoveredDate: new Date(),
       isMigrated: false,
+    });
+  }
+
+  public async updateLog(id: number, content: string): Promise<void> {
+    await db.logs.update(id, {
+      content,
+      updatedDate: new Date(),
     });
   }
 }

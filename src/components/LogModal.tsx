@@ -1,3 +1,4 @@
+import { getPlatformMode } from "@/utils";
 import {
   IonButton,
   IonButtons,
@@ -10,41 +11,75 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { OverlayEventDetail } from "@ionic/react/dist/types/components/react-component-lib/interfaces";
-import { useRef, useState } from "react";
-import { getPlatformMode } from "@/utils";
+import { useEffect, useRef, useState } from "react";
 
-interface AddLogModalProps {
+interface LogModalProps {
+  mode: "add" | "edit";
+  initialContent?: string;
   onSave: (content: string) => void;
+  onClose?: () => void;
   textareaRef: React.RefObject<HTMLIonTextareaElement>;
+  triggerId?: string;
 }
 
 type ModalAction = "save" | "discard";
 
-export default function AddLogModal(props: AddLogModalProps) {
-  const { onSave, textareaRef } = props;
+export default function LogModal(props: LogModalProps) {
+  const {
+    mode,
+    initialContent = "",
+    onSave,
+    onClose,
+    textareaRef,
+    triggerId,
+  } = props;
   const platformMode = getPlatformMode();
 
   const modal = useRef<HTMLIonModalElement>(null);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(initialContent);
 
-  const handleModalAction = (action: ModalAction, data?: string) => {
+  useEffect(() => {
+    setInputValue(initialContent);
+  }, [initialContent]);
+
+  useEffect(() => {
+    if (mode === "edit") {
+      modal.current?.present();
+    }
+  }, [mode]);
+
+  function handleModalAction(action: ModalAction, data?: string): void {
     modal.current?.dismiss(data, action);
-  };
+  }
 
-  const handleDismiss = (event: CustomEvent<OverlayEventDetail>) => {
+  function handleDismiss(event: CustomEvent<OverlayEventDetail>): void {
     const { data, role } = event.detail;
     if (role === "save" && data) onSave(data);
-    setInputValue("");
-  };
+    setInputValue(initialContent);
+    if (mode === "edit") {
+      onClose?.();
+    }
+  }
 
-  const handlePresent = () => {
+  function handlePresent(): void {
     textareaRef.current?.setFocus();
-  };
+
+    setTimeout(() => {
+      const nativeTextarea =
+        textareaRef.current?.getElementsByTagName("textarea")[0];
+      if (nativeTextarea) {
+        nativeTextarea.selectionStart = nativeTextarea.value.length;
+        nativeTextarea.selectionEnd = nativeTextarea.value.length;
+      }
+    }, 50);
+  }
+
+  const isAdd = mode === "add";
 
   return (
     <IonModal
       ref={modal}
-      trigger="add-log-button"
+      trigger={triggerId}
       onDidPresent={handlePresent}
       onDidDismiss={handleDismiss}
     >
@@ -53,15 +88,15 @@ export default function AddLogModal(props: AddLogModalProps) {
           <IonButtons slot="start">
             {platformMode === "ios" && (
               <IonButton onClick={() => handleModalAction("discard")}>
-                Discard
+                Cancel
               </IonButton>
             )}
           </IonButtons>
-          <IonTitle>New Log</IonTitle>
+          <IonTitle>{isAdd ? "Add Log" : "Edit Log"}</IonTitle>
           <IonButtons slot="end">
             {platformMode === "md" && (
               <IonButton onClick={() => handleModalAction("discard")}>
-                Discard
+                Cancel
               </IonButton>
             )}
             <IonButton
@@ -69,7 +104,7 @@ export default function AddLogModal(props: AddLogModalProps) {
               onClick={() => handleModalAction("save", inputValue)}
               disabled={!inputValue.trim()}
             >
-              Save
+              {isAdd ? "Save" : "Update"}
             </IonButton>
           </IonButtons>
         </IonToolbar>

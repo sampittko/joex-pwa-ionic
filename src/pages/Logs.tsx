@@ -1,4 +1,4 @@
-import { AddLogButton, AddLogModal, LogList } from "@/components";
+import { AddLogButton, LogList, LogModal } from "@/components";
 import { useBadgeSync, useLogs } from "@/hooks";
 import {
   IonContent,
@@ -12,7 +12,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function Logs() {
   const {
@@ -22,10 +22,26 @@ export default function Logs() {
     deleteLog,
     migrateLog,
     recoverLog,
+    updateLog,
   } = useLogs();
   const textareaRef = useRef<HTMLIonTextareaElement>(null);
+  const [logToEdit, setLogToEdit] = useState<{
+    id: number;
+    content: string;
+  } | null>(null);
 
   useBadgeSync(capturedLogs.length);
+
+  function handleEdit(id: number, content: string): void {
+    setLogToEdit({ id, content });
+  }
+
+  async function handleEditSave(content: string): Promise<void> {
+    if (logToEdit) {
+      await updateLog(logToEdit.id, content);
+      setLogToEdit(null);
+    }
+  }
 
   function renderContent(mode: "captured" | "migrated") {
     return (
@@ -41,6 +57,7 @@ export default function Logs() {
             logs={capturedLogs}
             onDelete={deleteLog}
             onMigrate={migrateLog}
+            onEdit={handleEdit}
           />
         ) : (
           <LogList
@@ -53,7 +70,14 @@ export default function Logs() {
         {mode === "captured" && (
           <>
             <AddLogButton textareaRef={textareaRef} />
-            <AddLogModal onSave={saveLog} textareaRef={textareaRef} />
+            <LogModal
+              mode={logToEdit ? "edit" : "add"}
+              initialContent={logToEdit?.content}
+              onSave={logToEdit ? handleEditSave : saveLog}
+              onClose={() => setLogToEdit(null)}
+              textareaRef={textareaRef}
+              triggerId={logToEdit ? undefined : "add-log-button"}
+            />
           </>
         )}
       </IonContent>
