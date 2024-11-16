@@ -104,7 +104,7 @@ export default function LogModal(props: LogModalProps) {
               onClick={() => handleModalAction("save", inputValue)}
               disabled={!inputValue.trim()}
             >
-              Save
+              {isAdd ? "Save" : "Update"}
             </IonButton>
           </IonButtons>
         </IonToolbar>

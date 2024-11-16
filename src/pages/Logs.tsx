@@ -91,7 +91,7 @@ export default function Logs() {
     <IonPage>
       <IonHeader collapse="fade" translucent>
         <IonToolbar>
-          <IonSegment value="captured" swipeGesture={false}>
+          <IonSegment swipeGesture={false}>
             <IonSegmentButton value="captured" contentId="captured">
               <IonLabel>Captured</IonLabel>
             </IonSegmentButton>

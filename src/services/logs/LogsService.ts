@@ -15,7 +15,7 @@ export default class LogsService {
 
   public async getAllLogs(): Promise<Log[]> {
     return await db.logs
-      .orderBy("updatedDate")
+      .orderBy("createdDate")
       .reverse()
       .toArray()
       .then((logs) =>

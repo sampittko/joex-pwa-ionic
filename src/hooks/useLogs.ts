@@ -33,7 +33,7 @@ export default function useLogs() {
     await LogsService.getInstance().recoverLog(id);
   }, []);
 
-  const handleUpdateLog = useCallback(async (id: number, content: string) => {
+  const handleUpdate = useCallback(async (id: number, content: string) => {
     await LogsService.getInstance().updateLog(id, content);
   }, []);
 
@@ -45,6 +45,6 @@ export default function useLogs() {
     deleteLog: handleDelete,
     migrateLog: handleMigrate,
     recoverLog: handleRecover,
-    updateLog: handleUpdateLog,
+    updateLog: handleUpdate,
   };
 }
