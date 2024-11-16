@@ -144,8 +144,8 @@ export default function LogList(props: LogListProps) {
         <IonAlert
           isOpen={logToDelete !== null}
           onDidDismiss={handleAlertDismiss}
-          header="Confirm Delete"
-          message="Are you sure you want to delete this log?"
+          header="Delete Log Entry"
+          message="Are you sure you want to delete this log entry? This action cannot be undone."
           buttons={[
             { text: "Cancel", role: "cancel" },
             {
